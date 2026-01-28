@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Kuliah - Semester Genap 2025/2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚✨ Jadwal Kuliah</h1>
+            <p class="subtitle">Semester Genap 2025/2026 • Tracking Tugas Mahasiswa</p>
+        </header>
+
+        <div class="table-responsive">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>📅 Hari</th>
+                        <th>⏰ Pukul</th>
+                        <th>📖 Mata Kuliah</th>
+                        <th>🏢 Ruang</th>
+                        <th>✅ Tugas Aktif</th>
+                        <th>⚡ Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in jadwal %}
+                    <tr class="schedule-row">
+                        <td class="cell-hari"><span class="badge">{{ item.hari }}</span></td>
+                        <td class="cell-jam">{{ item.jam }}</td>
+                        <td class="cell-matkul">{{ item.matkul }}</td>
+                        <td class="cell-ruang">{{ item.ruang }}</td>
+                        <td class="cell-tugas">
+                            {% if item.tugas %}
+                                <ul class="tugas-list">
+                                    {% for t in item.tugas %}
+                                    <li class="tugas-item">
+                                        <span>✓ {{ t }}</span>
+                                        <form action="/hapus_tugas" method="POST" class="form-hapus" onsubmit="return confirm('Hapus tugas ini?')">
+                                            <input type="hidden" name="matkul_id" value="{{ item.id }}">
+                                            <input type="hidden" name="tugas_index" value="{{ loop.index0 }}">
+                                            <button type="submit" class="btn-hapus" title="Hapus">✕</button>
+                                        </form>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span class="empty-state">— Belum ada tugas —</span>
+                            {% endif %}
+                        </td>
+                        <td class="cell-aksi">
+                            <form action="/tambah_tugas" method="POST" class="form-tambah">
+                                <input type="hidden" name="matkul_id" value="{{ item.id }}">
+                                <div class="input-group">
+                                    <input type="text" name="tugas" placeholder="Tugas baru..." required>
+                                    <button type="submit" class="btn-tambah" title="Tambah Tugas">+</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>❤️ Dibuat dengan passion untuk memudahkan tracking tugas kuliah mahasiswa</p>
+        </footer>
+    </div>
+</body>
+</html>

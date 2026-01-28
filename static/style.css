@@ -1,0 +1,479 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -50px;
+    right: -50px;
+    z-index: 0;
+    animation: float 8s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    bottom: 50px;
+    left: -100px;
+    z-index: 0;
+    animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(20px); }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    color: white;
+    padding: 50px 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+    background-size: cover;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+}
+
+header h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.subtitle {
+    font-size: 1.2em;
+    opacity: 0.95;
+    position: relative;
+    z-index: 2;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    padding: 40px;
+    background: linear-gradient(to bottom, #fafbff 0%, #f5f7ff 100%);
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.schedule-table thead {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.schedule-table th {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 18px 15px;
+    text-align: left;
+    font-weight: 700;
+    border: none;
+    font-size: 0.95em;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.schedule-table tbody tr {
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    position: relative;
+}
+
+.schedule-table tbody tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.schedule-table tbody tr:hover {
+    background-color: #f8f9ff;
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.1);
+    transform: translateX(4px);
+}
+
+.schedule-table tbody tr:hover::before {
+    opacity: 1;
+}
+
+.schedule-table td {
+    padding: 16px 15px;
+    border: none;
+}
+
+.cell-hari {
+    font-weight: 700;
+    width: 90px;
+}
+
+.badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.85em;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.cell-jam {
+    font-size: 0.95em;
+    color: #667eea;
+    width: 110px;
+    font-weight: 600;
+}
+
+.cell-matkul {
+    font-size: 0.95em;
+    color: #333;
+    min-width: 160px;
+    font-weight: 600;
+}
+
+.cell-ruang {
+    color: #666;
+    font-size: 0.9em;
+    width: 130px;
+    background: linear-gradient(135deg, #f093fb15 0%, #667eea15 100%);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.cell-tugas {
+    width: 220px;
+}
+
+.tugas-list {
+    list-style: none;
+    padding: 0;
+}
+
+.tugas-item {
+    background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.tugas-item:hover {
+    background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+    transform: translateX(2px);
+}
+
+.btn-hapus {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.btn-hapus:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.empty-state {
+    color: #bbb;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.cell-aksi {
+    width: 220px;
+}: linear-gradient(135deg, #f8f9fa 0%, #f5f7ff 100%);
+    padding: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    border-top: 1px solid #e9ecef;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    body::after {
+        width: 200px;
+        height: 200px;
+    }
+
+    header {
+        padding: 35px 20px;
+    }
+
+    header h1 {
+        font-size: 2.2em;
+    }
+
+    .subtitle {
+        font-size: 1em;
+    }
+
+    .table-responsive {
+        padding: 20px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 12px 8px;
+        font-size: 0.85em;
+    }
+
+    .cell-matkul {
+        min-width: 120px;
+    }
+
+    .cell-hari {
+        width: 70px;
+    }
+
+    .cell-jam {
+        width: 90px;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .form-tambah input[type="text"] {
+        width: 100%;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        border-radius: 12px;
+        margin: 0;
+    }
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        font-size: 0.95em;
+    }
+
+    .table-responsive {
+        padding: 15px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 10px 6px;
+        font-size: 0.75em;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        font-size: 0.7em;
+    }
+
+    .btn-hapus {
+        padding: 4px 6px;
+        font-size: 0.75em;
+    }
+
+    .btn-tambah {
+        padding: 8px 10px;
+        min-width: 36px;
+        font-size: 0.95em;
+    }
+
+    .form-tambah input[type="text"] {
+        padding: 8px 10px;
+        font-size: 0.85em;
+    }
+
+    footer {
+        padding: 20px 15px;
+        font-size: 0.85em;
+    }
+
+    .cell-tugas {
+        width: 180px;
+    }
+
+    .cell-aksi {
+        width: 180px;
+    }
+}
+
+@media (max-width: 320px) {
+    header h1 {
+        font-size: 1.4em;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 8px 4px;
+        font-size: 0.7
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    .table-responsive {
+        padding: 15px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+
+    .cell-matkul {
+        min-width: 120px;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .form-tambah input[type="text"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        border-radius: 0;
+    }
+
+    header {
+        padding: 20px 15px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .table-responsive {
+        padding: 10px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 8px;
+        font-size: 0.75em;
+    }
+
+    .badge {
+        padding: 4px 8px;
+        font-size: 0.75em;
+    }
+}
