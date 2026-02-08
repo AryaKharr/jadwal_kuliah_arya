@@ -28,16 +28,16 @@
                 </thead>
                 <tbody>
                     {% for item in jadwal %}
-                    <tr class="schedule-row">
-                        <td class="cell-hari"><span class="badge">{{ item.hari }}</span></td>
-                        <td class="cell-jam">{{ item.jam }}</td>
-                        <td class="cell-matkul">{{ item.matkul }}</td>
-                        <td class="cell-ruang">{{ item.ruang }}</td>
-                        <td class="cell-tugas">
+                    <tr class="schedule-row" onclick="openModal({{ item.id }}, '{{ item.hari }}', '{{ item.jam }}', '{{ item.matkul }}', '{{ item.ruang }}', {{ item.deskripsi | tojson }})">
+                        <td class="cell-hari" data-label="📅 Hari"><span class="badge">{{ item.hari }}</span></td>
+                        <td class="cell-jam" data-label="⏰ Jam">{{ item.jam }}</td>
+                        <td class="cell-matkul" data-label="📖 Matkul"><a href="/matkul/{{ item.id }}" class="matkul-link" onclick="event.stopPropagation()">{{ item.matkul }}</a></td>
+                        <td class="cell-ruang" data-label="🏢 Ruang">{{ item.ruang }}</td>
+                        <td class="cell-tugas" data-label="✅ Tugas">
                             {% if item.tugas %}
                                 <ul class="tugas-list">
                                     {% for t in item.tugas %}
-                                    <li class="tugas-item">
+                                    <li class="tugas-item" onclick="event.stopPropagation();">
                                         <span>✓ {{ t }}</span>
                                         <form action="/hapus_tugas" method="POST" class="form-hapus" onsubmit="return confirm('Hapus tugas ini?')">
                                             <input type="hidden" name="matkul_id" value="{{ item.id }}">
@@ -51,7 +51,7 @@
                                 <span class="empty-state">— Belum ada tugas —</span>
                             {% endif %}
                         </td>
-                        <td class="cell-aksi">
+                        <td class="cell-aksi" data-label="⚡ Aksi" onclick="event.stopPropagation();">
                             <form action="/tambah_tugas" method="POST" class="form-tambah">
                                 <input type="hidden" name="matkul_id" value="{{ item.id }}">
                                 <div class="input-group">
@@ -70,5 +70,91 @@
             <p>❤️ Dibuat dengan passion untuk memudahkan tracking tugas kuliah mahasiswa</p>
         </footer>
     </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="detail-item">
+                    <span class="detail-label">📖 Deskripsi Mata Kuliah</span>
+                    <p id="modalDeskripsi" class="modal-deskripsi"></p>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📅 Hari Kuliah</span>
+                    <span id="modalHari"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">⏰ Waktu Kuliah</span>
+                    <span id="modalJam"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">🏢 Lokasi</span>
+                    <span id="modalRuang"></span>
+                </div>
+                <div class="detail-item tugas-section">
+                    <span class="detail-label">✅ Daftar Tugas</span>
+                    <div id="modalTugasList" class="modal-tugas-list"></div>
+                </div>
+            </div>
+        </div>, deskripsi) {
+            document.getElementById('modalTitle').textContent = matkul;
+            document.getElementById('modalHari').textContent = hari;
+            document.getElementById('modalJam').textContent = jam;
+            document.getElementById('modalRuang').textContent = ruang;
+            document.getElementById('modalDeskripsi').textContent = deskripsi
+            document.getElementById('modalTitle').textContent = matkul;
+            document.getElementById('modalHari').textContent = hari;
+            document.getElementById('modalJam').textContent = jam;
+            document.getElementById('modalRuang').textContent = ruang;
+            
+            // Get tugas list from the table row
+            const row = event.currentTarget;
+            const tugasCell = row.querySelector('.cell-tugas');
+            const tugasList = tugasCell.querySelector('.tugas-list');
+            
+            const modalTugasList = document.getElementById('modalTugasList');
+            
+            if (tugasList) {
+                const tugas = Array.from(tugasList.querySelectorAll('.tugas-item')).map(li => {
+                    return li.querySelector('span').textContent.replace('✓ ', '');
+                });
+                
+                if (tugas.length > 0) {
+                    modalTugasList.innerHTML = tugas.map((t, idx) => 
+                        `<div class="modal-tugas-item">
+                            <span>✓ ${t}</span>
+                            <form action="/hapus_tugas" method="POST" class="form-hapus-modal" onsubmit="return confirm('Hapus tugas ini?')">
+                                <input type="hidden" name="matkul_id" value="${id}">
+                                <input type="hidden" name="tugas_index" value="${idx}">
+                                <button type="submit" class="btn-hapus-modal" title="Hapus">✕</button>
+                            </form>
+                        </div>`
+                    ).join('');
+                } else {
+                    modalTugasList.innerHTML = '<p class="modal-empty">Tidak ada tugas untuk mata kuliah ini</p>';
+                }
+            } else {
+                modalTugasList.innerHTML = '<p class="modal-empty">Tidak ada tugas untuk mata kuliah ini</p>';
+            }
+            
+            document.getElementById('detailModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
