@@ -1,0 +1,10 @@
+run = "python app.py"
+entrypoint = "app.py"
+
+[env]
+FLASK_APP = "app.py"
+FLASK_ENV = "production"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
