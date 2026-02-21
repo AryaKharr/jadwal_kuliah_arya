@@ -9,9 +9,9 @@ app = Flask(__name__)
 
 # ============= Database Configuration =============
 DATABASE_URL = os.environ.get('DATABASE_URL')
-# Railway menggunakan 'postgres://' tapi SQLAlchemy butuh 'postgresql://'
-if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
-    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+# Konversi URL ke format pg8000 driver
+if DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://', 1) if DATABASE_URL.startswith('postgres://') else DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
