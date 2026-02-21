@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
 # ============= Database Configuration =============
-# Sesuaikan dengan username, password, dan database name Anda
-DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://arya:arya1234@localhost:5432/jadwal_db'
+DATABASE_URL = os.environ.get('DATABASE_URL')
+# Railway menggunakan 'postgres://' tapi SQLAlchemy butuh 'postgresql://'
+if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
+    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

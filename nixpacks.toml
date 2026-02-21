@@ -1,0 +1,7 @@
+# Railway Nixpacks Configuration
+
+[phases.setup]
+aptPkgs = ["libpq-dev"]
+
+[start]
+cmd = "python app.py"
