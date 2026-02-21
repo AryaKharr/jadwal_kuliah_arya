@@ -24,7 +24,7 @@ class Jadwal(db.Model):
     deskripsi = db.Column(db.Text, nullable=False)
     
     # Relationship dengan Tugas
-    tugas_list = db.relationship('Tugas', backref='jadwal', lazy=True, cascade='all, delete-orphan')
+    tugas_list = db.relationship('Tugas', backref='jadwal', lazy=True, cascade='all, delete-orphan', order_by='Tugas.id')
     
     def to_dict(self):
         return {
@@ -34,7 +34,7 @@ class Jadwal(db.Model):
             'matkul': self.matkul,
             'ruang': self.ruang,
             'deskripsi': self.deskripsi,
-            'tugas': [tugas.nama for tugas in self.tugas_list]
+            'tugas': [{'id': tugas.id, 'nama': tugas.nama} for tugas in self.tugas_list]
         }
 
 class Tugas(db.Model):
@@ -77,12 +77,10 @@ def tambah_tugas():
 
 @app.route('/hapus_tugas', methods=['POST'])
 def hapus_tugas():
-    matkul_id = int(request.form.get('matkul_id'))
-    tugas_index = int(request.form.get('tugas_index'))
+    tugas_id = int(request.form.get('tugas_id'))
     
-    matkul = Jadwal.query.get(matkul_id)
-    if matkul and 0 <= tugas_index < len(matkul.tugas_list):
-        tugas = matkul.tugas_list[tugas_index]
+    tugas = Tugas.query.get(tugas_id)
+    if tugas:
         db.session.delete(tugas)
         db.session.commit()
     
@@ -124,6 +122,5 @@ def init_db():
 
 
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)

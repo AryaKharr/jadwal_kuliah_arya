@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ matkul.matkul }} - Jadwal Kuliah</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         .detail-container {
@@ -289,6 +291,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -322,22 +325,21 @@
 
             <div class="tasks-section">
                 <h2>✅ Tugas Aktif</h2>
-                
+
                 {% if matkul.tugas %}
-                    <ul class="task-list">
-                        {% for tugas in matkul.tugas %}
-                            <li class="task-item">
-                                <span>{{ tugas }}</span>
-                                <form action="/hapus_tugas" method="POST" class="form-hapus-modal">
-                                    <input type="hidden" name="matkul_id" value="{{ matkul.id }}">
-                                    <input type="hidden" name="tugas_index" value="{{ loop.index0 }}">
-                                    <button type="submit" class="btn-delete">Hapus</button>
-                                </form>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                <ul class="task-list">
+                    {% for tugas in matkul.tugas %}
+                    <li class="task-item">
+                        <span>{{ tugas.nama }}</span>
+                        <form action="/hapus_tugas" method="POST" class="form-hapus-modal">
+                            <input type="hidden" name="tugas_id" value="{{ tugas.id }}">
+                            <button type="submit" class="btn-delete">Hapus</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
                 {% else %}
-                    <p class="empty-tasks">Tidak ada tugas saat ini</p>
+                <p class="empty-tasks">Tidak ada tugas saat ini</p>
                 {% endif %}
 
                 <div class="add-task-form">
@@ -355,4 +357,5 @@
         </footer>
     </div>
 </body>
+
 </html>

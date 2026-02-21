@@ -43,11 +43,10 @@
                             <ul class="tugas-list">
                                 {% for t in item.tugas %}
                                 <li class="tugas-item" onclick="event.stopPropagation();">
-                                    <span>✓ {{ t }}</span>
+                                    <span>✓ {{ t.nama }}</span>
                                     <form action="/hapus_tugas" method="POST" class="form-hapus"
                                         onsubmit="return confirm('Hapus tugas ini?')">
-                                        <input type="hidden" name="matkul_id" value="{{ item.id }}">
-                                        <input type="hidden" name="tugas_index" value="{{ loop.index0 }}">
+                                        <input type="hidden" name="tugas_id" value="{{ t.id }}">
                                         <button type="submit" class="btn-hapus" title="Hapus">✕</button>
                                     </form>
                                 </li>
@@ -126,16 +125,17 @@
 
             if (tugasList) {
                 const tugas = Array.from(tugasList.querySelectorAll('.tugas-item')).map(li => {
-                    return li.querySelector('span').textContent.replace('✓ ', '');
+                    const form = li.querySelector('form');
+                    const tugasId = form.querySelector('input[name="tugas_id"]').value;
+                    return { name: li.querySelector('span').textContent.replace('✓ ', ''), id: tugasId };
                 });
 
                 if (tugas.length > 0) {
-                    modalTugasList.innerHTML = tugas.map((t, idx) =>
+                    modalTugasList.innerHTML = tugas.map((t) =>
                         `<div class="modal-tugas-item">
-                            <span>✓ ${t}</span>
+                            <span>✓ ${t.name}</span>
                             <form action="/hapus_tugas" method="POST" class="form-hapus-modal" onsubmit="return confirm('Hapus tugas ini?')">
-                                <input type="hidden" name="matkul_id" value="${id}">
-                                <input type="hidden" name="tugas_index" value="${idx}">
+                                <input type="hidden" name="tugas_id" value="${t.id}">
                                 <button type="submit" class="btn-hapus-modal" title="Hapus">✕</button>
                             </form>
                         </div>`
