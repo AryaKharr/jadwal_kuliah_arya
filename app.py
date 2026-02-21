@@ -49,6 +49,10 @@ class Tugas(db.Model):
     jadwal_id = db.Column(db.Integer, db.ForeignKey('jadwal_kuliah.id'), nullable=False)
     nama = db.Column(db.Text, nullable=False)
 
+# Auto-create tables saat app start
+with app.app_context():
+    db.create_all()
+
 
 # ============= Routes =============
 
